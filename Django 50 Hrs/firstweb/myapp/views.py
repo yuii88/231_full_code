@@ -14,21 +14,32 @@ def login(request):
 	return render(request,'myapp/login.html')
 
 from django.contrib.auth.models import User
-
+from django.contrib.auth import authenticate,login
 def Register(request):
-	if request.method == 'POST':
-		data = request.POST.copy()
-		first_name = data.get('first_name')
-		last_name = data.get('last_name')
-		email = data.get('email')
-		password = data.get('password')
-		newuser = User()
-		newuser.username = email
-		newuser.email =email
-		newuser.last_name = last_name
-		newuser.set_password()
-		newuser.save()
-	return render(request,'myapp/register.html')
+    if request.method == 'POST' :
+        data = request.POST.copy()
+        first_name = data.get('first_name')
+        last_name = data.get('last_name')
+        email = data.get('email')
+        password = data.get('password')
+
+        newuser = User()
+        newuser.username = email
+        newuser.email = email
+        newuser.first_name = first_name
+        newuser.last_name = last_name
+        newuser.set_password(password)
+        newuser.save() 
+
+        profile = Profile()
+        profile.user = User.objects.get(username=email)
+        profile.save()
+
+        #from django.contrib.auth import authenticate,login
+        user = authenticate(username=email,password=password) 
+        login(request,user) #ให้คนที่มีการ login ในระบบทำการloginเข้าไปเลย (Auto login)
+
+    return render(request,'myapp/register.html')
 
 def About(request):
 	return render(request,'myapp/about.html')
@@ -39,6 +50,8 @@ def Contact(request):
 def Flightstatus(request):
 	return render(request,'myapp/flightstatus.html')	
 
+def Search(request):
+    return render(request,'myapp/searching.html')
 
 	#return HttpResponse('<h1>สวัสดีวันนี้เรามาพบกัน</h1>')
 
