@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.core.files.storage import FileSystemStorage
+from .models import *
 #from django.http import HttpResponse โชข้อความหน้าเว็บ
- 
+
 def Home(request):
 	product1 = 'register'
 	product2 = 'Booking'
